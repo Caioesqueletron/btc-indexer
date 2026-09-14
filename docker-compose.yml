@@ -1,0 +1,33 @@
+services:
+  bitcoin:
+    image: ruimarinho/bitcoin-core:latest
+    command:
+      - bitcoind
+      - -regtest=1
+      - -server=1
+      - -txindex=1
+      - -rpcuser=bitcoin
+      - -rpcpassword=bitcoin
+      - -rpcallowip=0.0.0.0/0
+      - -fallbackfee=0.0001
+      - -printtoconsole
+    ports:
+      - "18443:18443"
+      - "18444:18444"
+    volumes:
+      - bitcoin-data:/home/bitcoin/.bitcoin
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: btcindexer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  bitcoin-data:
+  postgres-data:
